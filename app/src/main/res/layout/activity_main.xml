@@ -46,16 +46,6 @@
                 android:textColorHighlight="#120F0F" />
 
             <Button
-                android:id="@+id/btn_reset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:paddingTop="20sp"
-                android:paddingBottom="20sp"
-                android:text="RES"
-                android:textSize="18sp" />
-
-            <Button
                 android:id="@+id/btn_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

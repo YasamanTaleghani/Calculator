@@ -15,13 +15,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mButton0, mButton1, mButton2, mButton3, mButton4, mButton5, mButton6,
             mButton7, mButton8, mButton9, mButtonDot, mButtonPlus, mButtonMinus,
-            mButtonMultiple, mButtonDevide, mButtonEquals, mButtonReset;
+            mButtonMultiple, mButtonDevide, mButtonEquals,mButtonDel;
 
     private TextView mTextView;
     private String mString="";
-    float mValue=0;
     float mValueResult = 0;
-    boolean firstCalc = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         mButtonMultiple = findViewById(R.id.btn_multiple);
         mButtonDevide = findViewById(R.id.btn_devide);
         mButtonEquals = findViewById(R.id.btn_equals);
-        mButtonReset = findViewById(R.id.btn_reset);
+        mButtonDel = findViewById(R.id.btn_delete);
 
     }
 
@@ -163,14 +162,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                isItFisrtNumber("+");
+
                 if (mTextView == null) return;
                 else {
-                    mTextView.setText(mTextView.getText() + "+");
-                    String temp = findFloat("+", mString);
-                    mValue = Float.parseFloat(temp);
-                    mString += "+";
-                    calcResult("+", mValue);
+                    mTextView.setText(mTextView.getText() + " + ");
+                    mString += " + ";
                 }
             }
         });
@@ -180,14 +176,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                isItFisrtNumber("-");
                 if (mTextView == null) return;
                 else {
-                    String temp = findFloat("-", mString);
-                    mValue = Float.parseFloat(temp);
-                    mString += "-";
-                    mTextView.setText(mTextView.getText() + "-");
-                    calcResult("-", mValue);
+
+                    mTextView.setText(mTextView.getText() + " - ");
+                    mString += " - ";
                 }
             }
         });
@@ -197,14 +190,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                isItFisrtNumber("/");
+
                 if (mTextView == null) return;
                 else {
-                    String temp = findFloat("/", mString);
-                    mValue = Float.parseFloat(temp);
-                    mString += "/";
-                    mTextView.setText(mTextView.getText() + "/");
-                    calcResult("/", mValue);
+
+                    mTextView.setText(mTextView.getText() + " / ");
+                    mString += " / ";
                 }
             }
         });
@@ -214,14 +205,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                isItFisrtNumber("*");
+
                 if (mTextView == null) return;
                 else {
-                    String temp = findFloat("*", mString);
-                    mValue = Float.parseFloat(temp);
-                    mString += "*";
-                    mTextView.setText(mTextView.getText() + "*");
-                    calcResult("*", mValue);
+
+                    mTextView.setText(mTextView.getText() + " * ");
+                    mString += " * ";
                 }
             }
         });
@@ -230,48 +219,45 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
+                calcResult();
                 mTextView.setText(mTextView.getText() + " = " + mValueResult);
+
+            }
+        });
+
+        mButtonDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mString="";
+                mTextView.setText("");
+                mValueResult=0;
             }
         });
 
     }
 
-    private void calcResult(String s , float f) {
+    private void calcResult() {
+        String[] splitedString = mString.split(" ");
 
-        switch (s) {
-            case "+":
-                mValueResult += f;
-                break;
-            case "-":
-                mValueResult -= f;
-                break;
-            case "/":
-                mValueResult = mValueResult / f;
-                break;
-            default:
-                mValueResult *= f;
-                break;
+        mValueResult += Float.parseFloat(splitedString[0]);
+
+        for (int i = 1; i <splitedString.length ; i+=2) {
+            switch (splitedString[i]) {
+                case "+":
+                    mValueResult += Float.parseFloat(splitedString[i + 1]);
+                    break;
+                case "-":
+                    mValueResult -= Float.parseFloat(splitedString[i + 1]);
+                    break;
+                case "*":
+                    mValueResult *= Float.parseFloat(splitedString[i + 1]);
+                    break;
+                case "/":
+                    mValueResult /= Float.parseFloat(splitedString[i + 1]);
+                    break;
+            }
         }
 
-    }
-
-    private String findFloat(String simbol, String string) {
-        String result = "";
-
-        int index = string.lastIndexOf(simbol.charAt(0));
-        result = string.substring(index + 1);
-
-        return result;
-    }
-
-    private void isItFisrtNumber(String simbol){
-
-        if (firstCalc) {
-            Toast.makeText(this,"first",Toast.LENGTH_LONG).show();
-            int index = mString.indexOf(simbol.charAt(0));
-            mValueResult += Float.parseFloat(mString.substring(0 , index ));
-            firstCalc = false;
-        }
     }
 
 }
