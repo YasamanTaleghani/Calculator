@@ -1,9 +1,11 @@
 package com.example.calculator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +15,8 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String BUNLE_MVALUE_RESULT = "BunleMvalueResult";
+    public static final String BUNDLE_MSTRING = "BundleMstring";
     private Button mButton0, mButton1, mButton2, mButton3, mButton4, mButton5, mButton6,
             mButton7, mButton8, mButton9, mButtonDot, mButtonPlus, mButtonMinus,
             mButtonMultiple, mButtonDevide, mButtonEquals,mButtonDel;
@@ -26,10 +30,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         findView();
         setListeners();
 
+        if (savedInstanceState!=null){
+            mString = savedInstanceState.getString(BUNDLE_MSTRING);
+            mTextView.setText(savedInstanceState.getString(BUNDLE_MSTRING));
+            mValueResult = savedInstanceState.getFloat(BUNLE_MVALUE_RESULT);
+        }
     }
 
     private void findView() {
@@ -221,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 calcResult();
                 mTextView.setText(mTextView.getText() + " = " + mValueResult);
-
+                mString += " = " + mValueResult;
             }
         });
 
@@ -258,6 +266,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putFloat(BUNLE_MVALUE_RESULT,mValueResult);
+        outState.putString(BUNDLE_MSTRING,mString);
     }
 
 }
